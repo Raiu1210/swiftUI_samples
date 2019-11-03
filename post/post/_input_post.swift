@@ -30,14 +30,29 @@ struct _input_post: View {
                 print("URL : \(url)")
                 let request = URLRequest(url: url)
                 let session = URLSession.shared
-                session.dataTask(with: request) { (data, response, error) in if error == nil, let data = data, let response = response as? HTTPURLResponse {
-                    let jsonString = String(data: data, encoding: String.Encoding.utf8) ?? ""
-                    print(jsonString)
-                    }
+                session.dataTask(with: request) {
+                    (data, response, error) in if error == nil, let data = data, let _ = response as? HTTPURLResponse {
+                        let jsonString = String(data: data, encoding: String.Encoding.utf8) ?? ""
+                        print(jsonString)
+                        }
                     }.resume()
             }) {
-                Text(/*@START_MENU_TOKEN@*/"Button"/*@END_MENU_TOKEN@*/)
+                Text("GET method")
             }
+                .frame(width: 200.0, height: 50.0)
+            
+            
+            Button(action: {
+                let urlString = "http://192.168.3.7:3000/registration"
+                let url = URL(string: urlString)!
+                print("URL : \(url)")
+                
+            }) {
+                Text("POST method")
+            }
+                .frame(width: 200.0, height: 50.0)
+            
+            
 
         }
     }
