@@ -43,9 +43,40 @@ struct _input_post: View {
             
             
             Button(action: {
+//                let param = [
+//                    "firstName" : "Hello",
+//                    "lastName"  : "World",
+//                    "userId"    : "7"
+//                ]
+                
                 let urlString = "http://192.168.3.7:3000/registration"
                 let url = URL(string: urlString)!
+                let request = NSMutableURLRequest(url: url)
                 print("URL : \(url)")
+                
+                request.httpMethod = "POST"
+                request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+                let params:[String:Any] = [
+                    "foo": "bar",
+                    "baz":[
+                        "a": 1,
+                        "b": 2,
+                        "x": 3]
+                ]
+                do{
+                    request.httpBody = try JSONSerialization.data(withJSONObject: params, options: .prettyPrinted)
+
+                    let task:URLSessionDataTask = URLSession.shared.dataTask(with: request as URLRequest, completionHandler: {(data,response,error) -> Void in
+                        let resultData = String(data: data!, encoding: .utf8)!
+                        print("result:\(resultData)")
+                        print("response:\(response)")
+
+                    })
+                    task.resume()
+                }catch{
+                    print("Error:\(error)")
+                    return
+                }
                 
             }) {
                 Text("POST method")
@@ -63,3 +94,6 @@ struct _input_post_Previews: PreviewProvider {
         _input_post()
     }
 }
+
+
+
