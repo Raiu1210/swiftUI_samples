@@ -11,8 +11,7 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         VStack {
-            _displayMap()
-            _oppaiLabel()
+            _input_name()
         }
         
     }

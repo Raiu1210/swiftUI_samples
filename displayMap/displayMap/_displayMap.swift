@@ -12,6 +12,8 @@ import CoreLocation
 
 struct _displayMap: UIViewRepresentable {
     
+    var name = ""
+    
     func makeCoordinator() -> _displayMap.Coordinator {
         return _displayMap.Coordinator()
     }
@@ -43,10 +45,14 @@ struct _displayMap: UIViewRepresentable {
             }
         }
         
+        var counter = 0
         func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
             let last = locations.last
             print(last?.coordinate.latitude)
             print(last?.coordinate.longitude)
+            
+            print(counter)
+            counter += 1
             
         }
     }
