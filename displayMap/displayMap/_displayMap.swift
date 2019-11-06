@@ -23,8 +23,12 @@ struct _displayMap: UIViewRepresentable {
     
     func makeUIView(context: UIViewRepresentableContext<_displayMap>) -> MKMapView {
         manager.delegate = context.coordinator
-        manager.startUpdatingLocation()
         manager.requestAlwaysAuthorization()
+        manager.activityType = .automotiveNavigation
+        manager.desiredAccuracy = kCLLocationAccuracyKilometer
+        manager.distanceFilter = 10.0
+        manager.startUpdatingLocation()
+        
         map.showsUserLocation = true
         return map
     }

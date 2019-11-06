@@ -20,12 +20,12 @@ struct _input_name: View {
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                 
                 if name != "" {
-                    NavigationLink(destination: _displayMap(name: self.name)) {
+                    NavigationLink(destination: _displayMap(name: self.name).navigationBarTitle("", displayMode: .inline)) {
                         Text("Share Location")
                     }
                 }
             }.navigationBarTitle("Location Shareing")
-            
+            .padding()
         }
     }
 }
