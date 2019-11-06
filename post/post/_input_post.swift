@@ -43,12 +43,6 @@ struct _input_post: View {
             
             
             Button(action: {
-//                let param = [
-//                    "firstName" : "Hello",
-//                    "lastName"  : "World",
-//                    "userId"    : "7"
-//                ]
-                
                 let urlString = "http://192.168.3.7:3000/registration"
                 let url = URL(string: urlString)!
                 let request = NSMutableURLRequest(url: url)
@@ -70,7 +64,6 @@ struct _input_post: View {
                         let resultData = String(data: data!, encoding: .utf8)!
                         print("result:\(resultData)")
                         print("response:\(response)")
-
                     })
                     task.resume()
                 }catch{
@@ -82,7 +75,6 @@ struct _input_post: View {
                 Text("POST method")
             }
                 .frame(width: 200.0, height: 50.0)
-            
             
 
         }

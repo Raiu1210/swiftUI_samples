@@ -8,19 +8,47 @@
 
 import SwiftUI
 import MapKit
+import CoreLocation
 
 struct _displayMap: UIViewRepresentable {
-    typealias UIViewType = MKMapView
+    
+    func makeCoordinator() -> _displayMap.Coordinator {
+        return _displayMap.Coordinator()
+    }
+    
+    let map = MKMapView()
+    let manager = CLLocationManager()
     
     func makeUIView(context: UIViewRepresentableContext<_displayMap>) -> MKMapView {
-        MKMapView(frame: .zero)
+        manager.delegate = context.coordinator
+        manager.startUpdatingLocation()
+        manager.requestAlwaysAuthorization()
+        map.showsUserLocation = true
+        return map
     }
     
     func updateUIView(_ uiView: MKMapView, context: UIViewRepresentableContext<_displayMap>) {
-        let coordinate = CLLocationCoordinate2D(latitude: 37.3351, longitude: -122.0088)
-        let span = MKCoordinateSpan(latitudeDelta: 0.02, longitudeDelta: 0.02)
-        let region = MKCoordinateRegion(center: coordinate, span: span)
-        uiView.setRegion(region, animated: true)
+        
+    }
+    
+    
+    class Coordinator : NSObject, CLLocationManagerDelegate {
+        func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+            if status == .denied {
+                print("denied")
+            } else if status == .authorizedWhenInUse {
+                print("authorizedWhenInUse")
+            } else if status == .authorizedAlways {
+                print("authorizedAlways")
+            }
+        }
+        
+        func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+            let last = locations.last
+            print(last?.coordinate.latitude)
+            print(last?.coordinate.longitude)
+            
+        }
     }
     
 }
