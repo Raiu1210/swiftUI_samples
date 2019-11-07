@@ -13,13 +13,14 @@ import CoreLocation
 struct _displayMap: UIViewRepresentable {
     
     var name = ""
-    
-    func makeCoordinator() -> _displayMap.Coordinator {
-        return _displayMap.Coordinator()
-    }
-    
     let map = MKMapView()
     let manager = CLLocationManager()
+    
+    
+    func makeCoordinator() -> _displayMap.Coordinator {
+        return _displayMap.Coordinator(map: map)
+    }
+    
     
     func makeUIView(context: UIViewRepresentableContext<_displayMap>) -> MKMapView {
         manager.delegate = context.coordinator
@@ -27,6 +28,7 @@ struct _displayMap: UIViewRepresentable {
         manager.activityType = .automotiveNavigation
         manager.desiredAccuracy = kCLLocationAccuracyKilometer
         manager.distanceFilter = 10.0
+        manager.allowsBackgroundLocationUpdates = true
         manager.startUpdatingLocation()
         
         map.showsUserLocation = true
@@ -39,6 +41,12 @@ struct _displayMap: UIViewRepresentable {
     
     
     class Coordinator : NSObject, CLLocationManagerDelegate {
+        var map = MKMapView()
+        
+        init(map: MKMapView) {
+            self.map = map
+        }
+        
         func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
             if status == .denied {
                 print("denied")
@@ -55,9 +63,13 @@ struct _displayMap: UIViewRepresentable {
             print(last?.coordinate.latitude)
             print(last?.coordinate.longitude)
             
+            if let coordinate = locations.last?.coordinate {
+                let span = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+                let region = MKCoordinateRegion(center: coordinate, span: span)
+                map.region = region
+            }
             print(counter)
             counter += 1
-            
         }
     }
     
