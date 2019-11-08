@@ -10,7 +10,7 @@ import SwiftUI
 
 struct ContentView: View {
     let directory_path = NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true)[0]
-    let file_Name = "my_info.txt"
+    let file_Name = "my_info.json"
     let params = Test(
         foo: "bar",
         baz: ABX(
@@ -22,14 +22,26 @@ struct ContentView: View {
         
         
     var body: some View {
-        Button(action: {
+        Button(
+            action: {
                 let encoder = JSONEncoder()
                 let data = try! encoder.encode(self.params)
-                print(data)
+                let jsonstr:String = String(data: data, encoding: .utf8)!
+                print(jsonstr)
 
+                let d_data = try! encoder.encode(jsonstr)
+                print(d_data)
+                
                 let decoder = JSONDecoder()
-                let dec_data = try! decoder.decode(Test.self, from: data)
-            print(dec_data.foo)
+//                decoder.dateDecodingStrategy = .iso8601
+                
+                do {
+                    let decoded: Test = try decoder.decode(Test.self, from: jsonstr.data(using: .utf8)!)
+                    print(decoded)
+                    print(decoded.baz.a)
+                } catch {
+                    print(error.localizedDescription)
+                }
             }) {
             Text("Save")
         }
