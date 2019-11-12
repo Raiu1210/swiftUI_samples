@@ -15,6 +15,26 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        let defaults = UserDefaults.standard
+        var dic = ["firstLaunch": true]
+        defaults.register(defaults: dic)
+          
+        // Some Process will be here
+        if defaults.bool(forKey: "firstLaunch") {
+          
+            // Some Process will be here
+            let directory_path = NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true)[0]
+            let fileManager = FileManager.default
+            do {
+                try fileManager.createDirectory(atPath: directory_path, withIntermediateDirectories: true, attributes: nil)
+                print("Created directory")
+            } catch {
+                print("failed")
+            }
+            // off the flag to know if it is first time to launch
+            defaults.set(false, forKey: "firstLaunch")
+        }
+        
         return true
     }
 
