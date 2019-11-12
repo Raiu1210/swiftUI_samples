@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+
 struct _input_field: View {
     let directory_path = NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true)[0]
     let file_Name = "my_info.txt"
@@ -15,7 +16,7 @@ struct _input_field: View {
     
     @State var user_name: String = ""
     @State var password: String = ""
-    @State var input_check = false
+    @State var input_check: Bool = false
     
     let params = Test(
         foo: "bar",
@@ -42,6 +43,7 @@ struct _input_field: View {
             Button(
                 action: {
                     self.check_input()
+                    self.post_data()
                 }) {
                 Text("Save")
             }.alert(isPresented: $input_check) {
@@ -59,6 +61,17 @@ struct _input_field: View {
         if password == "" {
             input_check = true
         }
+    }
+    
+    func post_data() {
+        if input_check {
+            print("aborted")
+            return
+        }
+        
+        let user = User(user_name: user_name, password: password)
+        let api = API()
+        api.login(user: user)
     }
     
     func test() {
